@@ -1,4 +1,5 @@
- #define virtualinput_adress 0x01FF
+//Define memory addresses for virtual input, fan output, and temperature output
+#define virtualinput_adress 0x01FF
 #define fanoutput_adress 0x01F0
 #define tempoutput_adress 0x01D0
 
@@ -10,6 +11,7 @@
    4 -> TempcodeLCD Cntrl
    5 -> BuzzerCntrl
 */
+
 unsigned char progflags;
 unsigned char VTCursor;     //Cursor for virtual terminal
 unsigned char tmp;  //it holds the temperature
@@ -32,7 +34,7 @@ sbit LCD_D5_Direction at DDC5_bit;
 sbit LCD_D6_Direction at DDC6_bit;
 sbit LCD_D7_Direction at DDC7_bit;
 
-
+//Toggle global interrupts on or off
 void ToggleInterrupts(){
         SREG_I_bit = !SREG_I_bit;
 }
@@ -72,11 +74,15 @@ void SyncStrings(){
         unsigned char *FANOutput = (unsigned char *) fanoutput_adress;
         unsigned char *TEMPOutput = (unsigned char *) tempoutput_adress;
         unsigned char divfactor,size,i;
+ 
+ // Calculate size of MotorFanSpeed and store it in FANOutput
         size = SizeOfInteger(MotorFanSpeed);
         for(i = 0, divfactor = 1; size > i; i++, divfactor *= 10){
                 FANOutput[size-i-1] = (MotorFanSpeed/divfactor)%10 + '0';
         }
         FANOutput[size] = '\0';
+        
+        // Calculate size of tmp and store it in TEMPOutput
         size = SizeOfInteger(tmp);
         for(i = 0, divfactor = 1; size > i; i++, divfactor *= 10){
                 TEMPOutput[size-i-1] = (tmp /divfactor)%10 + '0';
@@ -84,7 +90,7 @@ void SyncStrings(){
         TEMPOutput[size] = '\0';
 }
 
-//This function initializes USART
+//This function initializes USART(Universal Synchronous and Asynchronous Receiver Transmitter)
 void InitializeVT(){
         VTCursor = 0;
           UCSR0C = (1<<UCSZ01)|(1<<UCSZ00);
@@ -111,7 +117,7 @@ void ReciveCharInterrupt() iv IVT_ADDR_USART0__RX{
                 VTCursor++;
         }
 }
-
+// This function sends a line break character (Carriage Return) via USART
 void SendLineBreak(){
         SendChar(13);
 }
