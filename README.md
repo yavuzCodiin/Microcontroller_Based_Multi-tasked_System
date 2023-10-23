@@ -5,7 +5,7 @@ The Microcontroller-Based Multi-tasked System is an advanced embedded system pro
 ## <ins>**Project Overview**</ins>
 * Devices: AVR ATMega128 (& UNI-DS6 Development Board), L293D Motor Driver, DC Motor
 * Language: MicroC
-* IDE: Atmel Studio
+* Software: Atmel Studio, Proteus
 
 In this project, a microcontroller acts as the brain of the system, orchestrating tasks and managing interactions between different hardware modules. The system employs multiple peripherals such as LCD displays, temperature sensors, LEDs, a motor, and a buzzer, creating a diverse set of functionalities.
 
